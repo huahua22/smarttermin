@@ -1,10 +1,12 @@
 package com.xwr.smarttermin.util;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -14,7 +16,7 @@ import java.net.URL;
  */
 public class MultipartEntityUtil {
   public static String post(String actionUrl, File file) throws IOException {
-
+    String result = null;
     String BOUNDARY = java.util.UUID.randomUUID().toString();
     String PREFIX = "--", LINEND = "\r\n";
     String MULTIPART_FROM_DATA = "multipart/form-data";
@@ -40,7 +42,7 @@ public class MultipartEntityUtil {
       sb1.append(PREFIX);
       sb1.append(BOUNDARY);
       sb1.append(LINEND);
-      sb1.append("Content-Disposition: form-data;file=\"" + file + "\"" + LINEND);
+      sb1.append("Content-Disposition: form-data;name=\"file\";filename=\"" + FileUtil.getSDPath() + "/pic.jpg" + "\"" + LINEND);
       sb1.append("Content-Type: application/octet-stream; charset=" + CHARSET + LINEND);
       sb1.append(LINEND);
       outStream.write(sb1.toString().getBytes());
@@ -54,27 +56,35 @@ public class MultipartEntityUtil {
       is.close();
       outStream.write(LINEND.getBytes());
     }
-
+   
     // 请求结束标志
     byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINEND).getBytes();
     outStream.write(end_data);
     outStream.flush();
     // 得到响应码
     int res = conn.getResponseCode();
-    System.out.println("response----->>"+conn.getResponseMessage());
+    System.out.println("response----->>" + conn.getResponseMessage());
     InputStream in = conn.getInputStream();
-    if (res == 200)
-    {
-      int ch;
-      StringBuilder sb2 = new StringBuilder();
-      while ((ch = in.read()) != -1) {
-        sb2.append((char) ch);
-      }
+    if (res == 200) {
+      result = convertStreamToString(in);
     }
     outStream.close();
     conn.disconnect();
-
-    return in.toString();
+    return result;
 
   }
+
+  public static String convertStreamToString(InputStream is) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+    StringBuilder sb = new StringBuilder();
+    String line = null;
+    while ((line = reader.readLine()) != null) {
+      sb.append(line);
+    }
+    is.close();
+    System.out.println("sb-->>" + sb.toString());
+    return sb.toString();
+  }
+
+
 }
