@@ -61,9 +61,9 @@ public class MultipartEntityUtil {
     outStream.flush();
     // 得到响应码
     int res = conn.getResponseCode();
+    System.out.println("response----->>"+conn.getResponseMessage());
     InputStream in = conn.getInputStream();
     if (res == 200)
-
     {
       int ch;
       StringBuilder sb2 = new StringBuilder();

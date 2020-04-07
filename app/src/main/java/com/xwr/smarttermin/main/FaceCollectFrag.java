@@ -1,8 +1,11 @@
 package com.xwr.smarttermin.main;
 
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +13,8 @@ import android.widget.Button;
 
 import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
-import com.xwr.smarttermin.util.BitmapUtil;
 import com.xwr.smarttermin.util.FileUtil;
-import com.xwr.smarttermin.util.MultipartEntityUtil;
 import com.xwr.smarttermin.view.CircleCameraPreview;
-
-import java.io.File;
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +47,8 @@ public class FaceCollectFrag extends BaseFragment {
 
       }
     });
+
+
     //    sfh = mSvFace.getHolder();
     //    sfh.addCallback(new SurfaceHolder.Callback() {
     //      @Override
@@ -91,7 +91,31 @@ public class FaceCollectFrag extends BaseFragment {
 
   @OnClick(R.id.btn_take_photo)
   public void onViewClicked() {
+    checkPermission();
     mSvFace.takePhoto();
+
+  }
+
+  public void checkPermission() {
+    boolean isGranted = true;
+    if (android.os.Build.VERSION.SDK_INT >= 23) {
+      if (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        //如果没有写sd卡权限
+        isGranted = false;
+      }
+      if (getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        isGranted = false;
+      }
+      Log.i("cbs", "isGranted == " + isGranted);
+      if (!isGranted) {
+        ((Activity) getContext()).requestPermissions(
+          new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission
+            .ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE},
+          102);
+      }
+    }
 
   }
 }

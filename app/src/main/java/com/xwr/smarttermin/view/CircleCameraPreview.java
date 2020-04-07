@@ -227,4 +227,6 @@ public class CircleCameraPreview extends SurfaceView implements SurfaceHolder.Ca
   public void setIPictureListener(IPictureListener listener) {
     mIPictureListener = listener;
   }
+
+
 }
