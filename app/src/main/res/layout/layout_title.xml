@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_h"
+                android:background="@color/title_color"
+                android:paddingLeft="@dimen/title_prl"
+                android:paddingRight="@dimen/title_prl">
+
+	<ImageView
+		android:id="@+id/logo"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:src="@mipmap/logo"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:layout_marginLeft="20dp"
+		android:layout_toRightOf="@id/logo"
+		android:orientation="vertical">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/title_name"
+			android:textColor="@color/colorWhite"
+			android:textSize="22sp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/title_name_en"
+			android:textColor="@color/colorWhite"
+			android:textSize="16sp"/>
+	</LinearLayout>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_centerVertical="true"
+		android:text="@string/title_instruct"
+		android:textColor="@color/colorWhite"
+		android:textSize="22sp"/>
+</RelativeLayout>

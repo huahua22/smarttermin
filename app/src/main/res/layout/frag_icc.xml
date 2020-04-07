@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical">
+
+	<Button
+		android:id="@+id/readerInit"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="初始化"
+		/>
+
+	<Button
+		android:id="@+id/powerOn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="上电"/>
+
+	<Button
+		android:id="@+id/readWrite"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="发送测试数据"/>
+
+	<Button
+		android:id="@+id/powerOff"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="下电"/>
+
+	<TextView
+		android:id="@+id/result"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="-------------result-------------"
+		android:textColor="@color/colorPrimaryDark"/>
+</LinearLayout>

@@ -1,0 +1,16 @@
+<resources>
+	<string name="app_name">智能终端</string>
+	<string name="title_name">智慧医院</string>
+	<string name="title_name_en">Smart  Hospital</string>
+	<string name="title_instruct">医保结算终端</string>
+	<string name="name">姓名</string>
+	<string name="idcard">身份证</string>
+	<string name="order_total">订单总计</string>
+	<string name="overall_reim">统筹报销</string>
+	<string name="medical_insurance_bill_payment_med">医保个账支付</string>
+	<string name="pay_at_your_own_expense">自费支付</string>
+	<dimen name="title_h">80dp</dimen>
+	<dimen name="title_prl">20dp</dimen>
+	<dimen name="content_ptb">25dp</dimen>
+	<dimen name="txt_normal_size">18dp</dimen>
+</resources>

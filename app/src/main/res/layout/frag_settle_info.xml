@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="请确认信息:"
+		android:textSize="20sp"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center_vertical"
+		android:orientation="vertical"
+		android:paddingLeft="50dp"
+		android:paddingRight="50dp">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:text="@string/name"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/txt_normal_size"/>
+
+			<TextView
+				android:id="@+id/tv_name"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:textColor="@color/black"
+				android:textSize="@dimen/txt_normal_size"/>
+		</RelativeLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/line_color"/>
+
+		<!--<RelativeLayout-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="50dp"-->
+		<!--android:gravity="center_vertical">-->
+
+		<!--<TextView-->
+		<!--android:layout_width="wrap_content"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:layout_alignParentLeft="true"-->
+		<!--android:text="@string/idcard"-->
+		<!--android:textColor="@color/colorBlack"-->
+		<!--android:textSize="@dimen/txt_normal_size"/>-->
+
+		<!--<TextView-->
+		<!--android:id="@+id/tv_cardId"-->
+		<!--android:layout_width="wrap_content"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:layout_alignParentRight="true"-->
+		<!--android:textSize="@dimen/txt_normal_size"/>-->
+		<!--</RelativeLayout>-->
+
+		<!--<View-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="1dp"-->
+		<!--android:background="@color/line_color"/>-->
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:text="@string/order_total"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/txt_normal_size"/>
+
+			<TextView
+				android:id="@+id/tv_total_money"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:textColor="@color/black"
+				android:textSize="@dimen/txt_normal_size"/>
+		</RelativeLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/line_color"/>
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:text="@string/overall_reim"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/txt_normal_size"/>
+
+			<TextView
+				android:id="@+id/tv_over_money"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:textColor="@color/black"
+				android:textSize="@dimen/txt_normal_size"/>
+		</RelativeLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/line_color"/>
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:text="@string/medical_insurance_bill_payment_med"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/txt_normal_size"/>
+
+			<TextView
+				android:id="@+id/tv_medicare_money"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:textColor="@color/colorRed"
+				android:textSize="@dimen/txt_normal_size"/>
+		</RelativeLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/line_color"/>
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:text="@string/pay_at_your_own_expense"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/txt_normal_size"/>
+
+			<TextView
+				android:id="@+id/tv_cash_money"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:textColor="@color/colorRed"
+				android:textSize="@dimen/txt_normal_size"/>
+		</RelativeLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/line_color"/>
+	</LinearLayout>
+</LinearLayout>

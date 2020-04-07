@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical">
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="50dp"
+		android:background="@mipmap/scan"
+		/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="40dp"
+		android:layout_marginBottom="10dp"
+		android:text="请将医保电子凭征放置扫描区"
+		android:textColor="@color/black"
+		android:textSize="26sp"/>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_margin="20dp"
+		android:background="@color/line_color"/>
+
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:orientation="horizontal">
+
+		<ImageView
+			android:layout_width="140dp"
+			android:layout_height="140dp"
+			android:scaleType="fitCenter"
+			android:src="@mipmap/code"/>
+
+		<TextView
+			android:layout_width="250dp"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="40dp"
+			android:gravity="center"
+			android:text="打开微信-右上角扫码，扫描左侧二维码，查看电子医保凭证"
+			android:textSize="20sp"/>
+	</LinearLayout>
+</LinearLayout>
