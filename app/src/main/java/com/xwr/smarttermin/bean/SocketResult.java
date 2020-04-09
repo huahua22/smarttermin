@@ -1,12 +1,10 @@
 package com.xwr.smarttermin.bean;
 
-import java.io.Serializable;
-
 /**
  * Create by xwr on 2020/3/31
  * Describe:
  */
-public class SocketResult implements Serializable {
+public class SocketResult{
   int id;
   String msgType;
   long timestamp;

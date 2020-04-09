@@ -1,12 +1,10 @@
 package com.xwr.smarttermin.bean;
 
-import java.io.Serializable;
-
 /**
  * Create by xwr on 2020/4/1
  * Describe:
  */
-public class CardBean implements Serializable {
+public class CardBean {
   String name;//姓名
   String cardNum;//卡号
 

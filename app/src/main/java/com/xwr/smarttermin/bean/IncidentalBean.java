@@ -1,12 +1,10 @@
 package com.xwr.smarttermin.bean;
 
-import java.io.Serializable;
-
 /**
  * Create by xwr on 2020/4/1
  * Describe:
  */
-public class IncidentalBean implements Serializable {
+public class IncidentalBean  {
   String name;//姓名
   String totalMoney;//结算总额
   String medicareMoney;//个账总额

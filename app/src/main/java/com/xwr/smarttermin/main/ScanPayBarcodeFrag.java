@@ -27,7 +27,6 @@ public class ScanPayBarcodeFrag extends BaseFragment {
   Unbinder unbinder;
   private HYScan mScan;
   private int mFd;
-  boolean flag = true;
   private Handler mHandler;
   private boolean mRunning = false;
 
@@ -68,21 +67,14 @@ public class ScanPayBarcodeFrag extends BaseFragment {
       while (mRunning) {
         int ret = mScan.begin_scan(mFd, 4000, bytes, 1024);
         if (ret > 0) {
-          byte[] bytes1 = new byte[ret];
-          System.arraycopy(bytes, 0, bytes1, 0, ret);
-          System.out.println("scan " + Hex.byteArray2Hex(bytes, 0, ret));
+          byte[] bytes1 = new byte[ret-1];
+          System.arraycopy(bytes, 0, bytes1, 0, ret-1);
+          System.out.println("scan " + Hex.byteArray2Hex(bytes, 0, ret-1));
           String code = new String(bytes1);
           System.out.println("scan " + code);
           mRunning = false;
-          //        new String(bytes1)
-          //          RecipientBean<String> recipientBean = new RecipientBean<>();
-          //          recipientBean.setRecipient(Session.mSocketResult.getRecipientData().getSender());
-          //          recipientBean.setRecipientNo(Session.mSocketResult.getRecipientData().getRecipientNo());
-          //          recipientBean.setSender(Session.mSocketResult.getRecipientData().getRecipient());
-          //          recipientBean.setSuccess(true);
-          //          recipientBean.setResult(code);
-          //          Session.mSocketResult.setRecipientData(recipientBean);
           Session.mSocketResult.getRecipientData().setResult(code);
+          System.out.println("xwr--->>code:" + Session.mSocketResult.getRecipientData().getResult());
           String mrecipient = Session.mSocketResult.getRecipientData().getSender();
           Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
           Session.mSocketResult.getRecipientData().setRecipient(mrecipient);

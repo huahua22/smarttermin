@@ -1,12 +1,10 @@
 package com.xwr.smarttermin.bean;
 
-import java.io.Serializable;
-
 /**
  * Create by xwr on 2020/4/7
  * Describe:
  */
-public class HttpResult implements Serializable {
+public class HttpResult {
   boolean success;
   String msg;
   FileDetails obj;

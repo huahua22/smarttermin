@@ -1,12 +1,10 @@
 package com.xwr.smarttermin.bean;
 
-import java.io.Serializable;
-
 /**
  * Create by xwr on 2020/4/7
  * Describe:
  */
-public class FileDetails implements Serializable {
+public class FileDetails{
   String fileName;
   String filePath;
   String fileSize;

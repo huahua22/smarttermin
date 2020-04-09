@@ -62,7 +62,7 @@ public class IccFrag extends BaseFragment {
 
   @OnClick({R.id.readerInit, R.id.powerOn, R.id.readWrite, R.id.powerOff})
   public void onViewClicked(View view) {
-    long ret;
+    long ret, ret2;
     byte slot = 0x01;
     switch (view.getId()) {
       case R.id.readerInit:
@@ -91,14 +91,28 @@ public class IccFrag extends BaseFragment {
         }
         break;
       case R.id.readWrite:
-        byte[] cmd = {0x00, (byte) 0x84, 0x00, 0x00, 0x08};
         byte[] apdu = new byte[64];
-        ret = UsbApi.ICC_Reader_Application(slot, 5, cmd, apdu);
-        mResult.append("\napplication=" + ret);
+        byte[] apdu2 = new byte[64];
+        byte APU1[] = {0x00, (byte) 0xa4, 0x04, 0x00, 0x0f, 0x73, 0x78, 0x31, 0x2e, 0x73, 0x68, 0x2e, (byte) 0xc9, (byte) 0xe7, (byte) 0xbb, (byte) 0xe1, (byte) 0xb1, (byte) 0xa3, (byte) 0xd5,
+          (byte) 0xcf};
+        ret = UsbApi.ICC_Reader_Application(slot, 20, APU1, apdu);
+        mResult.append("\napu1=" +  HexUtil.bytesToHexString(apdu, (int) ret));
+        byte APU2[] = {0x00, (byte) 0xa4, 0x00, 0x00, 0x02, (byte) 0xef, 0x05};
+        ret = UsbApi.ICC_Reader_Application(slot, 7, APU2, apdu);
+        mResult.append("\napu2=" +  HexUtil.bytesToHexString(apdu, (int) ret));
+        byte APU3[] = {0x00, (byte) 0xb2, 0x07, 0x04, 0x0b};
+        ret2 = UsbApi.ICC_Reader_Application(slot, 5, APU3, apdu2);
+        mResult.append("\napu3=" + HexUtil.bytesToHexString(apdu2, (int) ret));
+        //        byte[] cmd = {0x00, (byte) 0x84, 0x00, 0x00, 0x08};
+
+        //        ret = UsbApi.ICC_Reader_Application(slot, 5, cmd, apdu);
+        mResult.append("\napplication=" + ret + " " + ret2);
         if (ret > 0) {
           String data = null;
+          String data2 = null;
           data = HexUtil.bytesToHexString(apdu, (int) ret);
-          mResult.append(";data=" + data);
+          data2 = HexUtil.bytesToHexString(apdu2, (int) ret2);
+          mResult.append(";data=" + data + "data2:" + data2);
         } else {
           String data = new String("取随机数失败");
           mResult.append("\n" + data);

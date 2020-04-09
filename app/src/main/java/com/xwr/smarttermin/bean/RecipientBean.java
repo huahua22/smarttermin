@@ -1,12 +1,10 @@
 package com.xwr.smarttermin.bean;
 
-import java.io.Serializable;
-
 /**
  * Create by xwr on 2020/3/31
  * Describe:
  */
-public class RecipientBean<T> implements Serializable {
+public class RecipientBean<T>{
   String recipient;//接受者编号
   String sender;//发送者编号
   String recipientNo;//指令编号
@@ -38,20 +36,6 @@ public class RecipientBean<T> implements Serializable {
   public void setResult(T result) {
     this.result = result;
   }
-  //  public Object getResult() {
-//    return result;
-//  }
-//
-//  public void setResult(Object result) {
-//    this.result = result;
-//  }
-  //  public String getResult() {
-  //    return result;
-  //  }
-  //
-  //  public void setResult(String result) {
-  //    this.result = result;
-  //  }
 
   public String getRecipient() {
     return recipient;

@@ -109,15 +109,17 @@ public class IdCardFrag extends BaseFragment {
         //        return;
       }
       mTvOutput.setText(ic.getPeopleName() + ic.getIDCard());
-      CardBean cardBean = new CardBean();
-      cardBean.setName("张玲");
-      cardBean.setCardNum("362502199703045662");
-      Session.mSocketResult.getRecipientData().setResult(cardBean);
-      String mrecipient = Session.mSocketResult.getRecipientData().getSender();
-      Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
-      Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
-      Session.mSocketResult.getRecipientData().setSuccess(true);
-      WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
+      if (ic.getPeopleName() != null) {
+        CardBean cardBean = new CardBean();
+        cardBean.setName("张玲");
+        cardBean.setCardNum("362502199703045662");
+        Session.mSocketResult.getRecipientData().setResult(cardBean);
+        String mrecipient = Session.mSocketResult.getRecipientData().getSender();
+        Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
+        Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
+        Session.mSocketResult.getRecipientData().setSuccess(true);
+        WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
+      }
     } else {
       mTvOutput.setText("初始失败");
     }
