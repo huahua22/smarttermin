@@ -5,5 +5,5 @@ package com.xwr.smarttermin.inter;
  * Describe:
  */
 public interface ChangeFragment {
-  void change(int postion);
+  void change(int position);
 }

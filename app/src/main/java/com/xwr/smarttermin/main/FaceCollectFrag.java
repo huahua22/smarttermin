@@ -11,10 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.gson.Gson;
 import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
-import com.xwr.smarttermin.util.FileUtil;
+import com.xwr.smarttermin.bean.HttpResult;
+import com.xwr.smarttermin.comm.Session;
+import com.xwr.smarttermin.util.UiUtil;
 import com.xwr.smarttermin.view.CircleCameraPreview;
+import com.zhangke.websocket.WebSocketHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,13 +29,12 @@ import butterknife.Unbinder;
  * Create by xwr on 2020/4/2
  * Describe:
  */
-public class FaceCollectFrag extends BaseFragment {
+public class FaceCollectFrag extends BaseFragment implements CircleCameraPreview.IPictureListener {
   @BindView(R.id.sv_face)
   CircleCameraPreview mSvFace;
   Unbinder unbinder;
   @BindView(R.id.btn_take_photo)
   Button mBtnTakePhoto;
-  String path = FileUtil.getSDPath() + "/face_img.jpg";
 
   @Override
   public int getContentLayoutId() {
@@ -40,39 +43,13 @@ public class FaceCollectFrag extends BaseFragment {
 
   @Override
   protected void initView() {
-    mSvFace.setIPictureListener(new CircleCameraPreview.IPictureListener() {
-      @Override
-      public void onPictureData(byte[] data) {
-        System.out.print(data);
+  }
 
-      }
-    });
-
-
-    //    sfh = mSvFace.getHolder();
-    //    sfh.addCallback(new SurfaceHolder.Callback() {
-    //      @Override
-    //      public void surfaceCreated(SurfaceHolder holder) {
-    //        try {
-    //          camera = Camera.open(4);
-    //          camera.setPreviewDisplay(holder);
-    //          camera.startPreview();
-    //        } catch (Exception e) {
-    //          e.printStackTrace();
-    //        }
-    //      }
-    //
-    //      @Override
-    //      public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-    //      }
-    //
-    //      @Override
-    //      public void surfaceDestroyed(SurfaceHolder holder) {
-    //        camera.stopPreview();
-    //        camera.release();
-    //        camera = null;
-    //      }
-    //    });
+  @Override
+  protected void initData() {
+    super.initData();
+    checkPermission();
+    mSvFace.setIPictureListener(this);
   }
 
   @Override
@@ -91,9 +68,7 @@ public class FaceCollectFrag extends BaseFragment {
 
   @OnClick(R.id.btn_take_photo)
   public void onViewClicked() {
-    checkPermission();
     mSvFace.takePhoto();
-
   }
 
   public void checkPermission() {
@@ -117,5 +92,20 @@ public class FaceCollectFrag extends BaseFragment {
       }
     }
 
+  }
+
+  @Override
+  public void onPictureData(String data) {
+    HttpResult msg = new Gson().fromJson(data, HttpResult.class);
+    if (msg.isSuccess()) {
+      Session.mSocketResult.getRecipientData().setResult(msg.getObj().getFilePath());
+      String mrecipient = Session.mSocketResult.getRecipientData().getSender();
+      Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
+      Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
+      Session.mSocketResult.getRecipientData().setSuccess(true);
+      WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
+    } else {
+      UiUtil.showToast(getContext(), "图片上传失败");
+    }
   }
 }

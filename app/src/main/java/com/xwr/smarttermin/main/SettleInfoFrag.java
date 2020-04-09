@@ -44,7 +44,7 @@ public class SettleInfoFrag extends BaseFragment {
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
-      initData();
+      initInfoData();
     }
   };
 
@@ -57,7 +57,7 @@ public class SettleInfoFrag extends BaseFragment {
   protected void initView() {
   }
 
-  protected void initData() {
+  private void initInfoData() {
     if (mRecipientBean != null) {
       IncidentalBean incidentalBean = mRecipientBean.getIncidentalData();
       mTvName.setText(incidentalBean.getName());
@@ -70,8 +70,10 @@ public class SettleInfoFrag extends BaseFragment {
 
   @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
   public void onEvent(RecipientBean data) {
-    mRecipientBean = data;
-    mHandler.sendEmptyMessage(0);
+    if (null != data) {
+      mRecipientBean = data;
+      mHandler.sendEmptyMessage(0);
+    }
   }
 
 

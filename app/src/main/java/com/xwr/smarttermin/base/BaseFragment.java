@@ -16,7 +16,7 @@ public abstract class BaseFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-	  savedInstanceState) {
+    savedInstanceState) {
     mView = inflater.inflate(getContentLayoutId(), null);
     unbinder = ButterKnife.bind(this, mView);
     initView();
@@ -27,17 +27,21 @@ public abstract class BaseFragment extends Fragment {
 
   protected abstract void initView();
 
-  protected void initData() {}
+  protected void initData() {
+
+  }
 
   @Override
   public void setUserVisibleHint(boolean isVisibleToUser) {
     super.setUserVisibleHint(isVisibleToUser);
-    if (isVisibleToUser) {// 当fragment处于可见状态
+    if (isVisibleToUser) {// 当fragment处于可见状态，当fragment结合viewpagers使用的时候
       if (mView != null) {
+        System.out.println("--->>>visible");
         initData();
       }
     }
   }
+
 
   private boolean isFirstCreate = false;
 
@@ -45,6 +49,7 @@ public abstract class BaseFragment extends Fragment {
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     if (getUserVisibleHint() && !isFirstCreate) {
+      System.out.println("---->>>create");
       initData();
       isFirstCreate = true;
     }
@@ -55,4 +60,5 @@ public abstract class BaseFragment extends Fragment {
     super.onDestroyView();
     unbinder.unbind();
   }
+
 }

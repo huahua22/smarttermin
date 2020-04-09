@@ -83,6 +83,7 @@ public class IdCardFrag extends BaseFragment {
 
   @Override
   public void onDestroyView() {
+    api.UnInit();
     super.onDestroyView();
     unbinder.unbind();
   }
@@ -104,7 +105,8 @@ public class IdCardFrag extends BaseFragment {
       }
       if (ret != 0) {// 读卡失败
         mTvOutput.setText("读卡失败");
-        return;
+        api.WRFID_Read_Content(ic);
+        //        return;
       }
       mTvOutput.setText(ic.getPeopleName() + ic.getIDCard());
       CardBean cardBean = new CardBean();
@@ -116,7 +118,7 @@ public class IdCardFrag extends BaseFragment {
       Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
       Session.mSocketResult.getRecipientData().setSuccess(true);
       WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
-    }else{
+    } else {
       mTvOutput.setText("初始失败");
     }
   }

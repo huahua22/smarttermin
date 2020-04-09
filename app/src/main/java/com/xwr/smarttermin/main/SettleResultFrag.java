@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
-import com.xwr.smarttermin.bean.RecipientBean;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,9 +70,10 @@ public class SettleResultFrag extends BaseFragment {
     return rootView;
   }
 
-  @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
-  public void onMessageEvent(RecipientBean data) {
-    if ("055".equals(data.getRecipientNo())) {
+  @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+  public void onMessageEvent(String data) {
+    System.out.println("--->>>settle result event");
+    if ("055".equals(data)) {
       mHandler.sendEmptyMessage(1);
     } else {
       mHandler.sendEmptyMessage(0);

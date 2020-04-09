@@ -6,14 +6,14 @@ import java.io.Serializable;
  * Create by xwr on 2020/3/31
  * Describe:
  */
-public class RecipientBean implements Serializable {
+public class RecipientBean<T> implements Serializable {
   String recipient;//接受者编号
   String sender;//发送者编号
   String recipientNo;//指令编号
   IncidentalBean incidentalData;
   boolean success;
   String msg;
-  CardBean result;
+  T result;
 
   public boolean isSuccess() {
     return success;
@@ -31,13 +31,27 @@ public class RecipientBean implements Serializable {
     this.msg = msg;
   }
 
-  public CardBean getResult() {
+  public T getResult() {
     return result;
   }
 
-  public void setResult(CardBean result) {
+  public void setResult(T result) {
     this.result = result;
   }
+  //  public Object getResult() {
+//    return result;
+//  }
+//
+//  public void setResult(Object result) {
+//    this.result = result;
+//  }
+  //  public String getResult() {
+  //    return result;
+  //  }
+  //
+  //  public void setResult(String result) {
+  //    this.result = result;
+  //  }
 
   public String getRecipient() {
     return recipient;
@@ -70,4 +84,6 @@ public class RecipientBean implements Serializable {
   public void setIncidentalData(IncidentalBean incidentalData) {
     this.incidentalData = incidentalData;
   }
+
+
 }

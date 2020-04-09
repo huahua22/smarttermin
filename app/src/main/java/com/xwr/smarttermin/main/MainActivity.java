@@ -1,12 +1,15 @@
 package com.xwr.smarttermin.main;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
 import com.xwr.smarttermin.R;
-import com.xwr.smarttermin.base.BaseActivity;
 import com.xwr.smarttermin.base.FragmentFactory;
 import com.xwr.smarttermin.bean.CardBean;
 import com.xwr.smarttermin.bean.RecipientBean;
@@ -24,7 +27,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity implements ChangeFragment {
 
   @BindView(R.id.fl_content)
   FrameLayout mFlContent;
@@ -33,21 +36,21 @@ public class MainActivity extends BaseActivity {
   private SocketResult result;
 
   @Override
-  public int getContentLayoutId() {
-    return R.layout.activity_main;
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+    setContentView(R.layout.activity_main);
+    if (savedInstanceState == null) {
+      commitFrag(0);
+    }
+    initView();
   }
 
-  @Override
+
   protected void initView() {
     mContext = this;
-    commitFrag(0);
     WebSocketHandler.getDefault().addListener(socketListener);
-    FragmentParms.setFragmentSelected(new ChangeFragment() {
-      @Override
-      public void change(int postion) {
-        commitFrag(postion);
-      }
-    });
+    FragmentParms.setFragmentSelected(this);
   }
 
   public void commitFrag(int position) {
@@ -117,20 +120,21 @@ public class MainActivity extends BaseActivity {
         } else if ("041".equals(recipientData.getRecipientNo())) {//输密
           commitFrag(6);
         } else if ("051".equals(recipientData.getRecipientNo())) {//结算页面显示
-          commitFrag(1);
+          //          commitFrag(1);
         } else if ("052".equals(recipientData.getRecipientNo())) {//预结算页面显示
+          commitFrag(1);
           EventBus.getDefault().postSticky(recipientData);
-          commitFrag(1);
         } else if ("053".equals(recipientData.getRecipientNo())) {//自费
-          commitFrag(1);
+          //          commitFrag(1);
         } else if ("054".equals(recipientData.getRecipientNo())) {//未申领电子医保凭证
           commitFrag(5);
         } else if ("055".equals(recipientData.getRecipientNo())) {//结算成功
-          EventBus.getDefault().postSticky(recipientData);
           commitFrag(9);
+          EventBus.getDefault().postSticky(recipientData.getRecipientNo());
+
         } else if ("056".equals(recipientData.getRecipientNo())) {//结算失败
-          EventBus.getDefault().postSticky(recipientData);
           commitFrag(9);
+          EventBus.getDefault().postSticky(recipientData.getRecipientNo());
         }
       }
     }
@@ -153,7 +157,7 @@ public class MainActivity extends BaseActivity {
     CardBean cardBean = new CardBean();
     cardBean.setName("张玲");
     cardBean.setCardNum("362502199703045662");
-    result.getRecipientData().setResult(cardBean);
+//    result.getRecipientData().setResult(cardBean);
     //    readIDCard.close();
     String mrecipient = result.getRecipientData().getSender();
     result.getRecipientData().setSender(result.getRecipientData().getRecipient());
@@ -167,6 +171,11 @@ public class MainActivity extends BaseActivity {
     super.onDestroy();
     WebSocketHandler.getDefault().removeListener(socketListener);
     WebSocketHandler.getDefault().destroy();
+  }
+
+  @Override
+  public void change(int position) {
+    commitFrag(position);
   }
 }
 

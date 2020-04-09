@@ -25,7 +25,7 @@ import zz.yy.ucamir.cam.Camera;
 
 /**
  * Create by xwr on 2020/4/3
- * Describe:
+ * Describe:相机圆形预览
  */
 public class CircleCameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -185,7 +185,7 @@ public class CircleCameraPreview extends SurfaceView implements SurfaceHolder.Ca
     camera.takePicture(null, null, new Camera.PictureCallback() {
       @Override
       public void onPictureTaken(byte[] bytes, Camera camera) {
-        final File file = BitmapUtil.getFileFromBytes(bytes, FileUtil.getSDPath()+"/pic.jpg");
+        final File file = BitmapUtil.getFileFromBytes(bytes, FileUtil.getSDPath() + "/pic.jpg");
         try {
           new Thread() {
             @Override
@@ -196,7 +196,9 @@ public class CircleCameraPreview extends SurfaceView implements SurfaceHolder.Ca
               } catch (IOException e) {
                 e.printStackTrace();
               }
-              System.out.println("str--->>>" + str);
+              mIPictureListener.onPictureData(str);
+              System.out.println("str111111--->>>" + str);
+
             }
           }.start();
         } catch (Exception e) {
@@ -221,7 +223,7 @@ public class CircleCameraPreview extends SurfaceView implements SurfaceHolder.Ca
   }
 
   public interface IPictureListener {
-    public void onPictureData(byte[] data);
+    public void onPictureData(String data);
   }
 
   public void setIPictureListener(IPictureListener listener) {

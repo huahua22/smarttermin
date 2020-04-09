@@ -6,9 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
 import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
+import com.xwr.smarttermin.comm.Session;
 import com.xwr.smarttermin.view.CustomNumKeyView;
+import com.zhangke.websocket.WebSocketHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,6 +69,12 @@ public class PasswordFrag extends BaseFragment implements CustomNumKeyView.CallB
 
   @Override
   public void finishNum() {
-
+    Session.mSocketResult.getRecipientData().setResult(mEtPsd.getText().toString());
+    String mrecipient = Session.mSocketResult.getRecipientData().getSender();
+    Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
+    Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
+    Session.mSocketResult.getRecipientData().setSuccess(true);
+    WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
+    mEtPsd.setText("");
   }
 }
