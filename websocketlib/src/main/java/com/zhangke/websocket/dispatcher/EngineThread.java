@@ -18,7 +18,7 @@ public class EngineThread extends Thread {
     private String TAG = "WSEngineThread";
 
     private ArrayBlockingQueue<ResponseProcessEngine.EngineEntity> jobQueue = new ArrayBlockingQueue<>(10);
-
+    //线程池
     private ExecutorService executorService;
 
     private boolean stop;

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="20dp"
+		android:text="请确认自费信息:"
+		android:textSize="22sp"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center_vertical"
+		android:orientation="vertical"
+		android:paddingLeft="50dp"
+		android:paddingRight="50dp">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="50dp">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_centerVertical="true"
+				android:text="医保个账支付"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/txt_normal_size"/>
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:layout_alignParentRight="true"
+				android:gravity="center"
+				android:orientation="horizontal">
+
+				<TextView
+					android:id="@+id/tv_medicare_pay"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:layout_marginRight="2dp"
+					android:textColor="@color/colorPrimary"
+					android:textSize="@dimen/txt_normal_size"/>
+
+				<ImageView
+					android:id="@+id/icon"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@mipmap/icon_finish"/>
+			</LinearLayout>
+		</RelativeLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/line_color"/>
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:gravity="center_vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:text="@string/pay_at_your_own_expense"
+				android:textColor="@color/colorBlack"
+				android:textSize="@dimen/txt_normal_size"/>
+
+			<TextView
+				android:id="@+id/tv_cash_money"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:textColor="@color/colorRed"
+				android:textSize="@dimen/txt_normal_size"/>
+
+		</RelativeLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/line_color"/>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="80dp"
+			android:gravity="center"
+			android:orientation="horizontal"
+			android:paddingLeft="100dp"
+			android:paddingRight="100dp">
+
+			<View
+				android:layout_width="150dp"
+				android:layout_height="1dp"
+				android:background="@color/line_color"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:text="自费支付方式"
+				android:textSize="20sp"/>
+
+			<View
+				android:layout_width="150dp"
+				android:layout_height="1dp"
+				android:background="@color/line_color"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="50dp"
+			android:orientation="horizontal"
+			android:paddingLeft="100dp"
+			android:paddingRight="100dp">
+
+			<LinearLayout
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="vertical">
+
+				<ImageView
+					android:id="@+id/iv_face_pay"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@mipmap/scan_face_pay"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					android:text="扫脸支付"
+					android:textSize="20sp"/>
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="vertical">
+
+				<ImageView
+					android:id="@+id/iv_code_pay"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:src="@mipmap/scan_code_pay"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					android:text="扫码支付"
+					android:textSize="20sp"/>
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

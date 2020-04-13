@@ -39,6 +39,7 @@ public class ScanHealthCertificateFrag extends BaseFragment {
   protected void initView() {
 
   }
+
   private void initScan() {
     HandlerThread scanThread = new HandlerThread("scanHealthThread");
     scanThread.start();
@@ -66,9 +67,9 @@ public class ScanHealthCertificateFrag extends BaseFragment {
       while (mRunning) {
         int ret = mScan.begin_scan(mFd, 4000, bytes, 1024);
         if (ret > 0) {
-          byte[] bytes1 = new byte[ret];
-          System.arraycopy(bytes, 0, bytes1, 0, ret);
-          System.out.println("scan " + Hex.byteArray2Hex(bytes, 0, ret));
+          byte[] bytes1 = new byte[ret - 1];
+          System.arraycopy(bytes, 0, bytes1, 0, ret - 1);
+          System.out.println("scan " + Hex.byteArray2Hex(bytes, 0, ret - 1));
           String code = new String(bytes1);
           System.out.println("scan " + code);
           mRunning = false;

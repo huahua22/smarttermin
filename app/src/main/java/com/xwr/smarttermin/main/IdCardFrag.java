@@ -19,6 +19,7 @@ import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
 import com.xwr.smarttermin.bean.CardBean;
 import com.xwr.smarttermin.comm.Session;
+import com.xwr.smarttermin.util.UiUtil;
 import com.zhangke.websocket.WebSocketHandler;
 
 import butterknife.BindView;
@@ -43,8 +44,10 @@ public class IdCardFrag extends BaseFragment {
     public void handleMessage(Message msg) {
       switch (msg.what) {
         case USBMsg.USB_DeviceConnect:// 设备连接
+          UiUtil.showToast(getContext(), "设备连接");
           break;
         case USBMsg.USB_DeviceOffline:// 设备断开
+          UiUtil.showToast(getContext(), "设备断开");
           break;
         case USBMsg.ReadIdCardSusse:
           break;
@@ -90,6 +93,7 @@ public class IdCardFrag extends BaseFragment {
 
   @OnClick(R.id.btnleft01)
   public void onViewClicked() {
+    mTvOutput.setText("");
     if (isInit) {
       int ret;
       ret = api.WRFID_Authenticate();// 卡认证
@@ -105,20 +109,21 @@ public class IdCardFrag extends BaseFragment {
       }
       if (ret != 0) {// 读卡失败
         mTvOutput.setText("读卡失败");
-        api.WRFID_Read_Content(ic);
-        //        return;
+        //       api.WRFID_Read_Content(ic);
+        return;
       }
       mTvOutput.setText(ic.getPeopleName() + ic.getIDCard());
-      if (ic.getPeopleName() != null) {
+      if (ic!= null) {
         CardBean cardBean = new CardBean();
-        cardBean.setName("张玲");
-        cardBean.setCardNum("362502199703045662");
+        cardBean.setName(ic.getPeopleName());
+        cardBean.setCardNum(ic.getIDCard());
         Session.mSocketResult.getRecipientData().setResult(cardBean);
         String mrecipient = Session.mSocketResult.getRecipientData().getSender();
         Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
         Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
         Session.mSocketResult.getRecipientData().setSuccess(true);
         WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
+
       }
     } else {
       mTvOutput.setText("初始失败");

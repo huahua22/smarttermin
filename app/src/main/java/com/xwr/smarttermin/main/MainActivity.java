@@ -97,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
         } else if ("011".equals(recipientData.getRecipientNo())) {//身份证
           UiUtil.showToast(mContext, "请刷身份证");
           //          setReaderCard();
-          commitFrag(7);
+          EventBus.getDefault().postSticky("11");
+          //          commitFrag(7);
         } else if ("012".equals(recipientData.getRecipientNo())) {//医保卡
           UiUtil.showToast(mContext, "请刷医保卡");
           commitFrag(8);
@@ -125,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
           commitFrag(1);
           EventBus.getDefault().postSticky(recipientData);
         } else if ("053".equals(recipientData.getRecipientNo())) {//自费
-          //          commitFrag(1);
+          commitFrag(10);
+          EventBus.getDefault().postSticky(recipientData);
         } else if ("054".equals(recipientData.getRecipientNo())) {//未申领电子医保凭证
           commitFrag(5);
         } else if ("055".equals(recipientData.getRecipientNo())) {//结算成功
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
     CardBean cardBean = new CardBean();
     cardBean.setName("张玲");
     cardBean.setCardNum("362502199703045662");
-//    result.getRecipientData().setResult(cardBean);
+    //    result.getRecipientData().setResult(cardBean);
     //    readIDCard.close();
     String mrecipient = result.getRecipientData().getSender();
     result.getRecipientData().setSender(result.getRecipientData().getRecipient());

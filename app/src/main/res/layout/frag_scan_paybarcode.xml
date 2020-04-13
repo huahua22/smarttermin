@@ -16,7 +16,7 @@
 		android:layout_marginTop="25dp"
 		android:text="请将付款码放置扫码区"
 		android:textColor="@color/black"
-		android:textSize="22sp"/>
+		android:textSize="24sp"/>
 
 	<!--<Button-->
 	<!--android:id="@+id/btnScan"-->

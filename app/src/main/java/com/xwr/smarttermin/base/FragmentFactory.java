@@ -5,6 +5,7 @@ import com.xwr.smarttermin.main.IccFrag;
 import com.xwr.smarttermin.main.IdCardFrag;
 import com.xwr.smarttermin.main.IndexFrag;
 import com.xwr.smarttermin.main.NotClaimedFrag;
+import com.xwr.smarttermin.main.OwnExpenseFrag;
 import com.xwr.smarttermin.main.PasswordFrag;
 import com.xwr.smarttermin.main.ScanHealthCertificateFrag;
 import com.xwr.smarttermin.main.ScanPayBarcodeFrag;
@@ -53,6 +54,9 @@ public class FragmentFactory {
           break;
         case 9://结算结果
           fragment = new SettleResultFrag();
+          break;
+        case 10://自费
+          fragment = new OwnExpenseFrag();
           break;
       }
       assert fragment != null;

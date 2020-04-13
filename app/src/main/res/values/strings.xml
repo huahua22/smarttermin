@@ -11,6 +11,6 @@
 	<string name="pay_at_your_own_expense">自费支付</string>
 	<dimen name="title_h">80dp</dimen>
 	<dimen name="title_prl">20dp</dimen>
-	<dimen name="content_ptb">25dp</dimen>
-	<dimen name="txt_normal_size">18dp</dimen>
+	<dimen name="content_ptb">30dp</dimen>
+	<dimen name="txt_normal_size">20sp</dimen>
 </resources>

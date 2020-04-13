@@ -2,19 +2,19 @@ package com.xwr.smarttermin.main;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
-import com.xwr.smarttermin.bean.IncidentalBean;
 import com.xwr.smarttermin.bean.RecipientBean;
 import com.xwr.smarttermin.comm.FragmentParms;
+import com.xwr.smarttermin.comm.Session;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,24 +22,22 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
- * Create by xwr on 2020/4/2
+ * Create by xwr on 2020/4/13
  * Describe:
  */
-public class SettleInfoFrag extends BaseFragment {
-  private CountDownTimer timer;
-  @BindView(R.id.tv_name)
-  TextView mTvName;
-  @BindView(R.id.tv_total_money)
-  TextView mTvTotalMoney;
-  @BindView(R.id.tv_over_money)
-  TextView mTvOverMoney;
-  @BindView(R.id.tv_medicare_money)
-  TextView mTvMedicareMoney;
+public class OwnExpenseFrag extends BaseFragment {
+  @BindView(R.id.tv_medicare_pay)
+  TextView mTvMedicarePay;
   @BindView(R.id.tv_cash_money)
   TextView mTvCashMoney;
+  @BindView(R.id.iv_face_pay)
+  ImageView mIvFacePay;
+  @BindView(R.id.iv_code_pay)
+  ImageView mIvCodePay;
   Unbinder unbinder;
   RecipientBean mRecipientBean = null;
   @SuppressLint("HandlerLeak")
@@ -51,61 +49,55 @@ public class SettleInfoFrag extends BaseFragment {
     }
   };
 
+  private void initInfoData() {
+    mTvMedicarePay.setText(mRecipientBean.getIncidentalData().getMedicareMoney());
+    mTvCashMoney.setText(mRecipientBean.getIncidentalData().getCashMoney());
+  }
+
   @Override
   public int getContentLayoutId() {
-    return R.layout.frag_settle_info;
+    return R.layout.frag_own_expense;
   }
 
   @Override
   protected void initView() {
-    timer = new CountDownTimer(30 * 1000, 1000) {
-      @Override
-      public void onTick(long millisUntilFinished) {
-        // TODO Auto-generated method stub
-        //        mTvTimer.setText(millisUntilFinished / 1000 + "s");
-      }
 
-      @Override
-      public void onFinish() {
-        FragmentParms.sChangeFragment.change(0);
-      }
-    }.start();
   }
 
-  private void initInfoData() {
-    if (mRecipientBean != null) {
-      IncidentalBean incidentalBean = mRecipientBean.getIncidentalData();
-      mTvName.setText(incidentalBean.getName());
-      mTvMedicareMoney.setText(incidentalBean.getMedicareMoney());
-      mTvTotalMoney.setText(incidentalBean.getTotalMoney());
-      mTvCashMoney.setText(incidentalBean.getCashMoney());
-      mTvOverMoney.setText(incidentalBean.getOverMoney());
-    }
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    // TODO: inflate a fragment view
+    View rootView = super.onCreateView(inflater, container, savedInstanceState);
+    EventBus.getDefault().register(this);
+    unbinder = ButterKnife.bind(this, rootView);
+    return rootView;
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-  public void onEvent(RecipientBean data) {
+  public void onMessageEvent(RecipientBean data) {
     if (null != data) {
       mRecipientBean = data;
       mHandler.sendEmptyMessage(0);
     }
   }
 
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    // TODO: inflate a fragment view
-    View rootView = super.onCreateView(inflater, container, savedInstanceState);
-    unbinder = ButterKnife.bind(this, rootView);
-    EventBus.getDefault().register(this);
-    return rootView;
-  }
-
   @Override
   public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
-    timer.cancel();
     EventBus.getDefault().unregister(this);
+  }
+
+  @OnClick({R.id.iv_face_pay, R.id.iv_code_pay})
+  public void onViewClicked(View view) {
+    switch (view.getId()) {
+      case R.id.iv_face_pay:
+        Session.mSocketResult.getRecipientData().setRecipientNo("032");
+        FragmentParms.sChangeFragment.change(4);
+        break;
+      case R.id.iv_code_pay:
+        FragmentParms.sChangeFragment.change(3);
+        break;
+    }
   }
 }

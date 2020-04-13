@@ -50,9 +50,14 @@ public abstract class BaseFragment extends Fragment {
     super.onActivityCreated(savedInstanceState);
     if (getUserVisibleHint() && !isFirstCreate) {
       System.out.println("---->>>create");
-      initData();
       isFirstCreate = true;
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    initData();
   }
 
   @Override
