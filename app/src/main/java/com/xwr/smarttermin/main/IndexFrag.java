@@ -31,14 +31,14 @@ import org.greenrobot.eventbus.ThreadMode;
 public class IndexFrag extends BaseFragment {
   private Handler mainHandler;
   private boolean mRunning = false;
-  WRFIDApi api;
+  WRFIDApi api = null;
   boolean isInit = false;
   @SuppressLint("HandlerLeak")
   Handler MyHandler = new Handler() {
     public void handleMessage(Message msg) {
       switch (msg.what) {
         case USBMsg.USB_DeviceConnect:// 设备连接
-          UiUtil.showToast(getContext(), "设备连接");
+          //          UiUtil.showToast(getContext(), "设备连接");
           break;
         case USBMsg.USB_DeviceOffline:// 设备断开
           UiUtil.showToast(getContext(), "设备断开");
@@ -46,6 +46,20 @@ public class IndexFrag extends BaseFragment {
         case USBMsg.ReadIdCardSusse:
           break;
         case USBMsg.ReadIdCardFail:
+          break;
+        case 6:
+          api = new WRFIDApi(MyHandler);
+          boolean nedInit = true;
+          while (nedInit) {
+            isInit = api.WRFID_Init(getActivity());
+            if (isInit) {
+              mRunning = true;
+              initReadData();
+              nedInit = false;
+            } else {
+              UiUtil.showToast(getContext(), "设备初始化失败");
+            }
+          }
           break;
         default:
           break;
@@ -72,16 +86,13 @@ public class IndexFrag extends BaseFragment {
   @Override
   protected void initData() {
     super.initData();
-    api = new WRFIDApi(MyHandler);
-    isInit = api.WRFID_Init(getActivity());
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
   public void onMessageEvent(String data) {
     System.out.println("--->>>read result event：" + data);
-    if ("11".equals(data)) {
-      mRunning = true;
-      initReadData();
+    if ("011".equals(data)) {
+      MyHandler.sendEmptyMessage(6);
     }
   }
 
@@ -98,48 +109,53 @@ public class IndexFrag extends BaseFragment {
     public void run() {
       while (mRunning) {
         System.out.println("--->>>start");
-        if (isInit) {
-          int ret;
-          ret = api.WRFID_Authenticate();// 卡认证
-          if (ret != 0) {
-            System.out.println("--->>>authenticate fail");
-            continue;
-          }
-          IDCardInfo ic = new IDCardInfo();
-          ret = api.WRFID_Read_Content(ic);// 读卡
-          if (ret == -2) {
-            System.out.println("--->>>read content error");
-            continue;
-          }
-          if (ret != 0) {// 读卡失败
-            System.out.println("--->>>read content fail");
-            continue;
-          }
-          System.out.println(ic.getPeopleName() + ic.getIDCard());
-          if (ic != null) {
-            CardBean cardBean = new CardBean();
-            cardBean.setName(ic.getPeopleName());
-            cardBean.setCardNum(ic.getIDCard());
-            Session.mSocketResult.getRecipientData().setResult(cardBean);
-            String mrecipient = Session.mSocketResult.getRecipientData().getSender();
-            Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
-            Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
-            Session.mSocketResult.getRecipientData().setSuccess(true);
-            WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
-            mRunning = false;
-          }
-        } else {
-          UiUtil.showToast(getContext(), "初始失败");
+        int ret;
+        ret = api.WRFID_Authenticate();// 卡认证
+        if (ret != 0) {
+          System.out.println("--->>>authenticate fail");
+          continue;
+        }
+        IDCardInfo ic = new IDCardInfo();
+        ret = api.WRFID_Read_Content(ic);// 读卡
+        if (ret == -2) {
+          System.out.println("--->>>read content error");
+          continue;
+        }
+        if (ret != 0) {// 读卡失败
+          System.out.println("--->>>read content fail");
+          continue;
+        }
+        System.out.println(ic.getPeopleName() + ic.getIDCard());
+        if (ic != null) {
+          CardBean cardBean = new CardBean();
+          cardBean.setName(ic.getPeopleName());
+          cardBean.setCardNum(ic.getIDCard());
+          Session.mSocketResult.getRecipientData().setResult(cardBean);
+          String mrecipient = Session.mSocketResult.getRecipientData().getSender();
+          Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
+          Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
+          Session.mSocketResult.getRecipientData().setSuccess(true);
+          WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
+          mRunning = false;
         }
       }
     }
   };
 
   @Override
-  public void onDestroyView() {
+  public void onResume() {
+    super.onResume();
+    System.out.println("--->>>resume");
     mRunning = false;
-    api.UnInit();
+  }
+
+  @Override
+  public void onDestroyView() {
     super.onDestroyView();
+    mRunning = false;
+    if (api != null) {
+      api.UnInit();
+    }
     if (mainHandler != null) {
       mainHandler.removeCallbacks(mBackgroundRunnable);
     }

@@ -1,10 +1,7 @@
 package com.xwr.smarttermin.main;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +12,7 @@ import com.xwr.smarttermin.base.BaseFragment;
 import com.xwr.smarttermin.bean.IncidentalBean;
 import com.xwr.smarttermin.bean.RecipientBean;
 import com.xwr.smarttermin.comm.FragmentParms;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.xwr.smarttermin.comm.Session;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,14 +36,23 @@ public class SettleInfoFrag extends BaseFragment {
   TextView mTvCashMoney;
   Unbinder unbinder;
   RecipientBean mRecipientBean = null;
-  @SuppressLint("HandlerLeak")
+ /* @SuppressLint("HandlerLeak")
   Handler mHandler = new Handler() {
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
       initInfoData();
     }
-  };
+  };*/
+
+  @Override
+  protected void initData() {
+    super.initData();
+    if (Session.mSocketResult != null) {
+      mRecipientBean = Session.mSocketResult.getRecipientData();
+      initInfoData();
+    }
+  }
 
   @Override
   public int getContentLayoutId() {
@@ -83,13 +86,13 @@ public class SettleInfoFrag extends BaseFragment {
     }
   }
 
-  @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-  public void onEvent(RecipientBean data) {
-    if (null != data) {
-      mRecipientBean = data;
-      mHandler.sendEmptyMessage(0);
-    }
-  }
+  //  @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+  //  public void onEvent(RecipientBean data) {
+  //    if (null != data) {
+  //      mRecipientBean = data;
+  //      mHandler.sendEmptyMessage(0);
+  //    }
+  //  }
 
 
   @Override
@@ -97,7 +100,7 @@ public class SettleInfoFrag extends BaseFragment {
     // TODO: inflate a fragment view
     View rootView = super.onCreateView(inflater, container, savedInstanceState);
     unbinder = ButterKnife.bind(this, rootView);
-    EventBus.getDefault().register(this);
+    //    EventBus.getDefault().register(this);
     return rootView;
   }
 
@@ -106,6 +109,6 @@ public class SettleInfoFrag extends BaseFragment {
     super.onDestroyView();
     unbinder.unbind();
     timer.cancel();
-    EventBus.getDefault().unregister(this);
+    //    EventBus.getDefault().unregister(this);
   }
 }

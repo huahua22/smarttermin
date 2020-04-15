@@ -1,11 +1,7 @@
 package com.xwr.smarttermin.main;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.f4mds.usbreader.usbapi.USBDevice;
 import com.f4mds.usbreader.usbapi.UsbApi;
@@ -18,17 +14,14 @@ import com.zhangke.websocket.WebSocketHandler;
 
 import java.io.UnsupportedEncodingException;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import utils.HexUtil;
 import utils.UsbUtil;
 
 /**
- * Create by xwr on 2020/4/3
+ * Create by xwr on 2020/4/14
  * Describe:
  */
-public class IccFrag extends BaseFragment {
-  Unbinder unbinder;
+public class UnionPaycardsFrag extends BaseFragment {
   byte slot = 0x01;
   private Handler mHandler;
   private boolean mRunning;
@@ -41,27 +34,12 @@ public class IccFrag extends BaseFragment {
 
   @Override
   public int getContentLayoutId() {
-    return R.layout.frag_icc;
+    return R.layout.frag_unionpay_cards;
   }
 
   @Override
   protected void initView() {
 
-  }
-
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    // TODO: inflate a fragment view
-    View rootView = super.onCreateView(inflater, container, savedInstanceState);
-    unbinder = ButterKnife.bind(this, rootView);
-    return rootView;
-  }
-
-  @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    unbinder.unbind();
   }
 
   private void sendData(String num, String name) {
@@ -87,7 +65,7 @@ public class IccFrag extends BaseFragment {
         e.printStackTrace();
       }
     }
-    initReadData();
+    //    initReadData();
 
   }
 
@@ -176,4 +154,5 @@ public class IccFrag extends BaseFragment {
     UsbApi.ICC_Reader_PowerOff(slot);
 
   }
+
 }

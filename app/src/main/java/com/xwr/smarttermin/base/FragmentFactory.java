@@ -11,6 +11,7 @@ import com.xwr.smarttermin.main.ScanHealthCertificateFrag;
 import com.xwr.smarttermin.main.ScanPayBarcodeFrag;
 import com.xwr.smarttermin.main.SettleInfoFrag;
 import com.xwr.smarttermin.main.SettleResultFrag;
+import com.xwr.smarttermin.main.UnionPaycardsFrag;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,6 +58,9 @@ public class FragmentFactory {
           break;
         case 10://自费
           fragment = new OwnExpenseFrag();
+          break;
+        case 11://人脸采集
+          fragment = new UnionPaycardsFrag();
           break;
       }
       assert fragment != null;

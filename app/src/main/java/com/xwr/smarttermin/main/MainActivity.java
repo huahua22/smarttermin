@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 import com.google.gson.Gson;
 import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.FragmentFactory;
-import com.xwr.smarttermin.bean.CardBean;
 import com.xwr.smarttermin.bean.RecipientBean;
 import com.xwr.smarttermin.bean.SocketResult;
 import com.xwr.smarttermin.comm.FragmentParms;
@@ -40,16 +39,19 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
     super.onCreate(savedInstanceState);
     supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.activity_main);
+    initView();
     if (savedInstanceState == null) {
       commitFrag(0);
     }
-    initView();
+
   }
 
 
   protected void initView() {
     mContext = this;
-    WebSocketHandler.getDefault().addListener(socketListener);
+    if (WebSocketHandler.getDefault().isConnect()) {
+      WebSocketHandler.getDefault().addListener(socketListener);
+    }
     FragmentParms.setFragmentSelected(this);
   }
 
@@ -89,22 +91,23 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
     public <T> void onMessage(String message, T data) {
       Log.d(TAG, "onMessage(string, T):" + message);
       result = new Gson().fromJson(message, SocketResult.class);
+      Session.mSocketResult = null;
       Session.mSocketResult = result;
       if (result.getMsgType().equals("instruction")) {
         RecipientBean recipientData = result.getRecipientData();
         if ("000".equals(recipientData.getRecipientNo())) {//初始化
           commitFrag(0);
+          EventBus.getDefault().postSticky("000");
         } else if ("011".equals(recipientData.getRecipientNo())) {//身份证
+          commitFrag(0);
+          EventBus.getDefault().postSticky("011");
           UiUtil.showToast(mContext, "请刷身份证");
-          //          setReaderCard();
-          EventBus.getDefault().postSticky("11");
-          //          commitFrag(7);
         } else if ("012".equals(recipientData.getRecipientNo())) {//医保卡
           UiUtil.showToast(mContext, "请刷医保卡");
           commitFrag(8);
         } else if ("013".equals(recipientData.getRecipientNo())) {//银联
           UiUtil.showToast(mContext, "请刷银联卡");
-          commitFrag(8);
+          commitFrag(11);
         } else if ("014".equals(recipientData.getRecipientNo())) {//门诊卡
           UiUtil.showToast(mContext, "请刷门诊卡");
           commitFrag(8);
@@ -124,16 +127,15 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
           //          commitFrag(1);
         } else if ("052".equals(recipientData.getRecipientNo())) {//预结算页面显示
           commitFrag(1);
-          EventBus.getDefault().postSticky(recipientData);
+          //          EventBus.getDefault().postSticky(recipientData);
         } else if ("053".equals(recipientData.getRecipientNo())) {//自费
           commitFrag(10);
-          EventBus.getDefault().postSticky(recipientData);
+          //          EventBus.getDefault().postSticky(recipientData);
         } else if ("054".equals(recipientData.getRecipientNo())) {//未申领电子医保凭证
           commitFrag(5);
         } else if ("055".equals(recipientData.getRecipientNo())) {//结算成功
           commitFrag(9);
           EventBus.getDefault().postSticky(recipientData.getRecipientNo());
-
         } else if ("056".equals(recipientData.getRecipientNo())) {//结算失败
           commitFrag(9);
           EventBus.getDefault().postSticky(recipientData.getRecipientNo());
@@ -142,37 +144,12 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
     }
   };
 
-  private void setReaderCard() {
-
-    boolean isReader = true;
-    //    ReadIDCard readIDCard = ReadIDCard.getInstance();
-    //      while (isReader) {
-    //        if (readIDCard.checkIDCard()) {
-    //          result.setSuccess(true);
-    //          CardBean cardBean = new CardBean();
-    //          cardBean.setName(readIDCard.getName());
-    //          cardBean.setCardNum(readIDCard.getID());
-    //          result.setResult(new Gson().toJson(cardBean));
-    //          isReader = false ;
-    //        }
-    //      }
-    CardBean cardBean = new CardBean();
-    cardBean.setName("张玲");
-    cardBean.setCardNum("362502199703045662");
-    //    result.getRecipientData().setResult(cardBean);
-    //    readIDCard.close();
-    String mrecipient = result.getRecipientData().getSender();
-    result.getRecipientData().setSender(result.getRecipientData().getRecipient());
-    result.getRecipientData().setRecipient(mrecipient);
-    result.getRecipientData().setSuccess(true);
-    WebSocketHandler.getDefault().send(new Gson().toJson(result));
-  }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
     WebSocketHandler.getDefault().removeListener(socketListener);
-    WebSocketHandler.getDefault().destroy();
+    //    WebSocketHandler.getDefault().destroy();
   }
 
   @Override

@@ -7,6 +7,7 @@ package com.xwr.smarttermin.bean;
 public class CardBean {
   String name;//姓名
   String cardNum;//卡号
+  String socialCardNum;//社保卡号
 
   public String getName() {
     return name;
@@ -22,5 +23,13 @@ public class CardBean {
 
   public void setCardNum(String cardNum) {
     this.cardNum = cardNum;
+  }
+
+  public String getSocialCardNum() {
+    return socialCardNum;
+  }
+
+  public void setSocialCardNum(String socialCardNum) {
+    this.socialCardNum = socialCardNum;
   }
 }

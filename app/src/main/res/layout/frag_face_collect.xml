@@ -31,17 +31,20 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="30dp"
-			android:text="请保持光源充足"
-			android:textColor="@color/black"
-			android:textSize="22sp"/>
+			android:text="请将人脸至于摄像范围内"
+			android:textSize="18sp"/>
 
-		<Button
-			android:id="@+id/btn_take_photo"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="10dp"
-			android:background="@color/title_color"
-			android:text="拍照"
-			android:textColor="@color/colorWhite"/>
+
 	</LinearLayout>
+
+	<Button
+		android:id="@+id/btn_take_photo"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentBottom="true"
+		android:layout_margin="10dp"
+		android:background="@drawable/btn_fillet"
+		android:text="注册人脸"
+		android:textColor="@color/colorWhite"/>
 </RelativeLayout>

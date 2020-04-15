@@ -16,10 +16,6 @@ import com.xwr.smarttermin.bean.RecipientBean;
 import com.xwr.smarttermin.comm.FragmentParms;
 import com.xwr.smarttermin.comm.Session;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,13 +41,23 @@ public class OwnExpenseFrag extends BaseFragment {
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
-      initInfoData();
+
     }
   };
 
+  @Override
+  protected void initData() {
+    super.initData();
+    initInfoData();
+  }
+
   private void initInfoData() {
-    mTvMedicarePay.setText(mRecipientBean.getIncidentalData().getMedicareMoney());
-    mTvCashMoney.setText(mRecipientBean.getIncidentalData().getCashMoney());
+    if (Session.mSocketResult.getRecipientData() != null) {
+      mRecipientBean = Session.mSocketResult.getRecipientData();
+      mTvMedicarePay.setText(mRecipientBean.getIncidentalData().getMedicareMoney());
+      mTvCashMoney.setText(mRecipientBean.getIncidentalData().getCashMoney());
+    }
+
   }
 
   @Override
@@ -68,24 +74,24 @@ public class OwnExpenseFrag extends BaseFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     // TODO: inflate a fragment view
     View rootView = super.onCreateView(inflater, container, savedInstanceState);
-    EventBus.getDefault().register(this);
+    //    EventBus.getDefault().register(this);
     unbinder = ButterKnife.bind(this, rootView);
     return rootView;
   }
 
-  @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+ /* @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
   public void onMessageEvent(RecipientBean data) {
     if (null != data) {
       mRecipientBean = data;
       mHandler.sendEmptyMessage(0);
-    }
-  }
+    }*/
+  //  }
 
   @Override
   public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
-    EventBus.getDefault().unregister(this);
+    //    EventBus.getDefault().unregister(this);
   }
 
   @OnClick({R.id.iv_face_pay, R.id.iv_code_pay})

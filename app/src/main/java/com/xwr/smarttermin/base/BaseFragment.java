@@ -37,7 +37,7 @@ public abstract class BaseFragment extends Fragment {
     if (isVisibleToUser) {// 当fragment处于可见状态，当fragment结合viewpagers使用的时候
       if (mView != null) {
         System.out.println("--->>>visible");
-        initData();
+//        initData();
       }
     }
   }
