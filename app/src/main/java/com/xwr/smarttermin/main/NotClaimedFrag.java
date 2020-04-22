@@ -11,9 +11,13 @@ import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
 import com.xwr.smarttermin.comm.FragmentParms;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.xwr.smarttermin.util.UiUtil.println;
 
 /**
  * Create by xwr on 2020/4/2
@@ -42,6 +46,7 @@ public class NotClaimedFrag extends BaseFragment {
       @Override
       public void onFinish() {
         FragmentParms.sChangeFragment.change(0);
+        EventBus.getDefault().postSticky("000");
       }
     }.start();
   }
@@ -59,6 +64,7 @@ public class NotClaimedFrag extends BaseFragment {
     super.onDestroyView();
     unbinder.unbind();
     timer.cancel();
+    println("notClaimedFrag timer cancel");
   }
 
 }

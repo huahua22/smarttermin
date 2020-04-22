@@ -19,7 +19,7 @@ import utils.UsbUtil;
 
 /**
  * Create by xwr on 2020/4/14
- * Describe:
+ * Describe:银联卡扫描
  */
 public class UnionPaycardsFrag extends BaseFragment {
   byte slot = 0x01;

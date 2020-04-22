@@ -17,12 +17,13 @@ import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
 import com.xwr.smarttermin.bean.CardBean;
 import com.xwr.smarttermin.comm.Session;
-import com.xwr.smarttermin.util.UiUtil;
 import com.zhangke.websocket.WebSocketHandler;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import static com.xwr.smarttermin.util.UiUtil.println;
 
 /**
  * Create by xwr on 2020/4/2
@@ -38,26 +39,29 @@ public class IndexFrag extends BaseFragment {
     public void handleMessage(Message msg) {
       switch (msg.what) {
         case USBMsg.USB_DeviceConnect:// 设备连接
-          //          UiUtil.showToast(getContext(), "设备连接");
+          println("小二代证设备连接");
           break;
         case USBMsg.USB_DeviceOffline:// 设备断开
-          UiUtil.showToast(getContext(), "设备断开");
+          println("小二代证设备断开");
           break;
         case USBMsg.ReadIdCardSusse:
+          println("小二代证读卡成功");
           break;
         case USBMsg.ReadIdCardFail:
+          println("小二代证读卡失败");
           break;
         case 6:
           api = new WRFIDApi(MyHandler);
           boolean nedInit = true;
-          while (nedInit) {
+          while (nedInit && api != null) {
+            println(Thread.currentThread().getName());
             isInit = api.WRFID_Init(getActivity());
             if (isInit) {
               mRunning = true;
               initReadData();
               nedInit = false;
             } else {
-              UiUtil.showToast(getContext(), "设备初始化失败");
+              println("小二代证设备初始化失败");
             }
           }
           break;
@@ -107,25 +111,26 @@ public class IndexFrag extends BaseFragment {
   Runnable mBackgroundRunnable = new Runnable() {
     @Override
     public void run() {
+      println(Thread.currentThread().getName());
       while (mRunning) {
-        System.out.println("--->>>start");
+        println("read card thread start");
         int ret;
         ret = api.WRFID_Authenticate();// 卡认证
         if (ret != 0) {
-          System.out.println("--->>>authenticate fail");
+          println("authenticate fail");
           continue;
         }
         IDCardInfo ic = new IDCardInfo();
         ret = api.WRFID_Read_Content(ic);// 读卡
         if (ret == -2) {
-          System.out.println("--->>>read content error");
+          println("read content error");
           continue;
         }
         if (ret != 0) {// 读卡失败
-          System.out.println("--->>>read content fail");
+          println("read content fail");
           continue;
         }
-        System.out.println(ic.getPeopleName() + ic.getIDCard());
+        println(ic.getPeopleName() + ic.getIDCard());
         if (ic != null) {
           CardBean cardBean = new CardBean();
           cardBean.setName(ic.getPeopleName());
@@ -145,7 +150,7 @@ public class IndexFrag extends BaseFragment {
   @Override
   public void onResume() {
     super.onResume();
-    System.out.println("--->>>resume");
+    println("index resume");
     mRunning = false;
   }
 
@@ -153,12 +158,16 @@ public class IndexFrag extends BaseFragment {
   public void onDestroyView() {
     super.onDestroyView();
     mRunning = false;
-    if (api != null) {
+    if (api != null && isInit) {
       api.UnInit();
+      println("api uninit");
+      isInit = false;
     }
     if (mainHandler != null) {
       mainHandler.removeCallbacks(mBackgroundRunnable);
+      println("remove idcard thread");
     }
     EventBus.getDefault().unregister(this);
+    println("indexFrag destroy");
   }
 }

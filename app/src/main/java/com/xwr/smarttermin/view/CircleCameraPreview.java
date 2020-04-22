@@ -9,7 +9,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -27,7 +26,7 @@ import zz.yy.ucamir.cam.Camera;
  * Create by xwr on 2020/4/3
  * Describe:相机圆形预览
  */
-public class CircleCameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+public class CircleCameraPreview extends SurfaceView {
 
   private static final String TAG = "CircleCameraPreview";
 
@@ -85,7 +84,7 @@ public class CircleCameraPreview extends SurfaceView implements SurfaceHolder.Ca
   private void init() {
     this.setFocusable(true);
     this.setFocusableInTouchMode(true);
-    getHolder().addCallback(this);
+//    getHolder().addCallback(this);
     clipPath = new Path();
     centerPoint = new Point();
   }
@@ -155,31 +154,31 @@ public class CircleCameraPreview extends SurfaceView implements SurfaceHolder.Ca
   }
 
 
-  @Override
-  public void surfaceCreated(SurfaceHolder holder) {
-    try {
-      camera = Camera.open(4);
-      camera.setDisplayOrientation(180);
-      camera.setPreviewDisplay(holder);
-      camera.startPreview();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-
-  @Override
-  public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-  }
-
-
-  @Override
-  public void surfaceDestroyed(SurfaceHolder holder) {
-    camera.stopPreview();
-    camera.release();
-    camera = null;
-  }
+//  @Override
+//  public void surfaceCreated(SurfaceHolder holder) {
+//    try {
+//      camera = Camera.open(4);
+//      camera.setDisplayOrientation(180);
+//      camera.setPreviewDisplay(holder);
+//      camera.startPreview();
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+//  }
+//
+//
+//  @Override
+//  public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+//
+//  }
+//
+//
+//  @Override
+//  public void surfaceDestroyed(SurfaceHolder holder) {
+//    camera.stopPreview();
+//    camera.release();
+//    camera = null;
+//  }
 
   public void takePhoto() {
     camera.takePicture(null, null, new Camera.PictureCallback() {

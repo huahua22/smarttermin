@@ -14,6 +14,8 @@ import com.xwr.smarttermin.bean.RecipientBean;
 import com.xwr.smarttermin.comm.FragmentParms;
 import com.xwr.smarttermin.comm.Session;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -36,14 +38,6 @@ public class SettleInfoFrag extends BaseFragment {
   TextView mTvCashMoney;
   Unbinder unbinder;
   RecipientBean mRecipientBean = null;
- /* @SuppressLint("HandlerLeak")
-  Handler mHandler = new Handler() {
-    @Override
-    public void handleMessage(Message msg) {
-      super.handleMessage(msg);
-      initInfoData();
-    }
-  };*/
 
   @Override
   protected void initData() {
@@ -52,15 +46,6 @@ public class SettleInfoFrag extends BaseFragment {
       mRecipientBean = Session.mSocketResult.getRecipientData();
       initInfoData();
     }
-  }
-
-  @Override
-  public int getContentLayoutId() {
-    return R.layout.frag_settle_info;
-  }
-
-  @Override
-  protected void initView() {
     timer = new CountDownTimer(30 * 1000, 1000) {
       @Override
       public void onTick(long millisUntilFinished) {
@@ -71,9 +56,21 @@ public class SettleInfoFrag extends BaseFragment {
       @Override
       public void onFinish() {
         FragmentParms.sChangeFragment.change(0);
+        EventBus.getDefault().postSticky("000");
       }
     }.start();
   }
+
+  @Override
+  public int getContentLayoutId() {
+    return R.layout.frag_settle_info;
+  }
+
+  @Override
+  protected void initView() {
+
+  }
+
 
   private void initInfoData() {
     if (mRecipientBean != null) {
@@ -86,21 +83,12 @@ public class SettleInfoFrag extends BaseFragment {
     }
   }
 
-  //  @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-  //  public void onEvent(RecipientBean data) {
-  //    if (null != data) {
-  //      mRecipientBean = data;
-  //      mHandler.sendEmptyMessage(0);
-  //    }
-  //  }
-
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     // TODO: inflate a fragment view
     View rootView = super.onCreateView(inflater, container, savedInstanceState);
     unbinder = ButterKnife.bind(this, rootView);
-    //    EventBus.getDefault().register(this);
     return rootView;
   }
 
@@ -109,6 +97,6 @@ public class SettleInfoFrag extends BaseFragment {
     super.onDestroyView();
     unbinder.unbind();
     timer.cancel();
-    //    EventBus.getDefault().unregister(this);
+    System.out.println("--->>>settleInfoFrag timer cancel");
   }
 }

@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
     initView();
     if (savedInstanceState == null) {
       commitFrag(0);
+      EventBus.getDefault().postSticky("000");
     }
 
   }
@@ -49,8 +50,12 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
 
   protected void initView() {
     mContext = this;
-    if (WebSocketHandler.getDefault().isConnect()) {
-      WebSocketHandler.getDefault().addListener(socketListener);
+    boolean setConnect = true;
+    while (setConnect) {
+      if (WebSocketHandler.getDefault().isConnect()) {
+        WebSocketHandler.getDefault().addListener(socketListener);
+        setConnect = false;
+      }
     }
     FragmentParms.setFragmentSelected(this);
   }
@@ -107,10 +112,10 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
           commitFrag(8);
         } else if ("013".equals(recipientData.getRecipientNo())) {//银联
           UiUtil.showToast(mContext, "请刷银联卡");
-          commitFrag(11);
+          commitFrag(13);
         } else if ("014".equals(recipientData.getRecipientNo())) {//门诊卡
           UiUtil.showToast(mContext, "请刷门诊卡");
-          commitFrag(8);
+          commitFrag(13);
         } else if ("021".equals(recipientData.getRecipientNo())) {//医保电子凭证
           commitFrag(2);
         } else if ("022".equals(recipientData.getRecipientNo())) {//支付宝扫码
@@ -118,19 +123,19 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
         } else if ("023".equals(recipientData.getRecipientNo())) {//微信扫码
           commitFrag(3);
         } else if ("031".equals(recipientData.getRecipientNo())) {//人脸采集
-          commitFrag(4);
+          commitFrag(12);
+          EventBus.getDefault().postSticky("031");
         } else if ("032".equals(recipientData.getRecipientNo())) {//人脸校验
-          commitFrag(4);
+          commitFrag(12);
+          EventBus.getDefault().postSticky("032");
         } else if ("041".equals(recipientData.getRecipientNo())) {//输密
           commitFrag(6);
         } else if ("051".equals(recipientData.getRecipientNo())) {//结算页面显示
-          //          commitFrag(1);
+          commitFrag(14);
         } else if ("052".equals(recipientData.getRecipientNo())) {//预结算页面显示
           commitFrag(1);
-          //          EventBus.getDefault().postSticky(recipientData);
         } else if ("053".equals(recipientData.getRecipientNo())) {//自费
           commitFrag(10);
-          //          EventBus.getDefault().postSticky(recipientData);
         } else if ("054".equals(recipientData.getRecipientNo())) {//未申领电子医保凭证
           commitFrag(5);
         } else if ("055".equals(recipientData.getRecipientNo())) {//结算成功
@@ -149,7 +154,8 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
   protected void onDestroy() {
     super.onDestroy();
     WebSocketHandler.getDefault().removeListener(socketListener);
-    //    WebSocketHandler.getDefault().destroy();
+    Log.d(TAG, "webSocket destroy");
+    WebSocketHandler.getDefault().destroy();
   }
 
   @Override

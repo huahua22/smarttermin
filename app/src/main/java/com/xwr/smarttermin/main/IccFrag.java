@@ -14,6 +14,7 @@ import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
 import com.xwr.smarttermin.bean.CardBean;
 import com.xwr.smarttermin.comm.Session;
+import com.xwr.smarttermin.util.UiUtil;
 import com.zhangke.websocket.WebSocketHandler;
 
 import java.io.UnsupportedEncodingException;
@@ -22,6 +23,8 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import utils.HexUtil;
 import utils.UsbUtil;
+
+import static com.xwr.smarttermin.util.UiUtil.println;
 
 /**
  * Create by xwr on 2020/4/3
@@ -35,13 +38,13 @@ public class IccFrag extends BaseFragment {
   byte APU1[] = {0x00, (byte) 0xa4, 0x04, 0x00, 0x0f, 0x73, 0x78, 0x31, 0x2e, 0x73, 0x68, 0x2e, (byte) 0xc9, (byte) 0xe7, (byte) 0xbb, (byte) 0xe1, (byte) 0xb1, (byte) 0xa3, (byte) 0xd5, (byte)
     0xcf};//卡片初始化1
   byte APU2[] = {0x00, (byte) 0xa4, 0x00, 0x00, 0x02, (byte) 0xef, 0x05};//卡片初始化2
+  byte APU5[] = {0x00, (byte) 0xa4, 0x00, 0x00, 0x02, (byte) 0xef, 0x06};//卡验证
   byte APU3[] = {0x00, (byte) 0xb2, 0x07, 0x04, 0x0b};//获取社保卡号
   byte APU4[] = {0x00, (byte) 0xb2, 0x02, 0x04, 0x20};//姓名
-  byte APU5[] = {0x00, (byte) 0xa4, 0x00, 0x00, 0x02, (byte) 0xef, 0x06};
 
   @Override
   public int getContentLayoutId() {
-    return R.layout.frag_icc;
+    return R.layout.frag_index;
   }
 
   @Override
@@ -67,7 +70,7 @@ public class IccFrag extends BaseFragment {
   private void sendData(String num, String name) {
     CardBean cardBean = new CardBean();
     cardBean.setCardNum(num);
-    cardBean.setName("张玲");
+    cardBean.setName(name);
     Session.mSocketResult.getRecipientData().setResult(cardBean);
     String mrecipient = Session.mSocketResult.getRecipientData().getSender();
     Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
@@ -87,7 +90,11 @@ public class IccFrag extends BaseFragment {
         e.printStackTrace();
       }
     }
-    initReadData();
+    if (USBDevice.mDeviceConnection != null) {
+      initReadData();
+    } else {
+      UiUtil.showToast(getContext(), "请设置USB权限");
+    }
 
   }
 
@@ -101,24 +108,16 @@ public class IccFrag extends BaseFragment {
 
   //实现扫描窗耗时操作
   Runnable mBackgroundRunnable = new Runnable() {
+
     long ret, ret2;
     String name;
 
     @Override
     public void run() {
       while (mRunning) {
-        if (USBDevice.mDeviceConnection != null) {
-          //初始化
-          ret = UsbApi.Reader_Init(USBDevice.mDeviceConnection, USBDevice.usbEpIn, USBDevice.usbEpOut);
-          System.out.println("--->>>read init=" + ret);
-        } else {
-          try {
-            UsbUtil.getInstance(getContext()).initUsbData();
-            continue;
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
+        //初始化
+        ret = UsbApi.Reader_Init(USBDevice.mDeviceConnection, USBDevice.usbEpIn, USBDevice.usbEpOut);
+        System.out.println("--->>>read init=" + ret);
         //上电
         byte[] atr = new byte[64];
         ret = UsbApi.ICC_Reader_PowerOn(slot, atr);
@@ -136,30 +135,28 @@ public class IccFrag extends BaseFragment {
         byte[] apdu3 = new byte[64];
         byte[] apdu4 = new byte[64];
         ret = UsbApi.ICC_Reader_Application(slot, 20, APU1, apdu1);
-        System.out.println("\napu1=" + HexUtil.bytesToHexString(apdu1, (int) ret));
+        println("init1 card=" + HexUtil.bytesToHexString(apdu1, (int) ret));
         ret = UsbApi.ICC_Reader_Application(slot, 7, APU2, apdu1);
-        System.out.println("\napu2=" + HexUtil.bytesToHexString(apdu1, (int) ret));
+        println("init2 card=" + HexUtil.bytesToHexString(apdu1, (int) ret));
         ret2 = UsbApi.ICC_Reader_Application(slot, 5, APU3, apdu2);
+        println("card num:" + HexUtil.bytesToHexString(apdu2, (int) ret));
+        byte[] data1 = new byte[9];
+        System.arraycopy(apdu2, 2, data1, 0, 9);
+        println("card num:" + new String(data1));
         ret2 = UsbApi.ICC_Reader_Application(slot, 7, APU5, apdu3);
-        System.out.println("--->>>read:" + HexUtil.bytesToHexString(apdu3, (int) ret2));
-        ret2 = UsbApi.ICC_Reader_Application(slot, 5, APU4, apdu4);
-        System.out.println("--->>>read:" + HexUtil.bytesToHexString(apdu4, (int) ret2));
-        byte[] data2 = new byte[6];
-        System.arraycopy(apdu4, 2, data2, 0, 6);
+        println("card verify:" + HexUtil.bytesToHexString(apdu3, (int) ret2));
+        long ret3 = UsbApi.ICC_Reader_Application(slot, 5, APU4, apdu4);
+        println("--->>>card name Hex:" + HexUtil.bytesToHexString(apdu4, (int) ret3));
         try {
-          name = new String(data2, "GBK");
-          System.out.println("--->>>read:" + name);
+          name = new String(apdu4, 2, (byte) 0x1E, "GBK").trim();
+          println("--->>>read:" + name);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
         }
         if (ret > 0) {
-          byte[] data1 = new byte[9];
-          System.arraycopy(apdu2, 2, data1, 0, 9);
-          System.out.println("--->>>" + HexUtil.bytesToHexString(data1, (int) 9));
-          System.out.println("--->>>" + new String(data1));
           sendData(new String(data1), name);
         } else {
-          System.out.println("--->>>read fail");
+          println("read fail");
           continue;
         }
       }
@@ -174,6 +171,5 @@ public class IccFrag extends BaseFragment {
       mHandler.removeCallbacks(mBackgroundRunnable);
     }
     UsbApi.ICC_Reader_PowerOff(slot);
-
   }
 }

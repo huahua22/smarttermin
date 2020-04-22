@@ -49,7 +49,12 @@ public class FaceCollectFrag extends BaseFragment implements CircleCameraPreview
   protected void initData() {
     super.initData();
     checkPermission();
+    initCamera();
     mSvFace.setIPictureListener(this);
+  }
+
+  private void initCamera() {
+
   }
 
   @Override

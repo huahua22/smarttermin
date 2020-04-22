@@ -2,6 +2,7 @@ package com.xwr.smarttermin.main;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
+import com.xwr.smarttermin.comm.FragmentParms;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,7 +33,7 @@ public class SettleResultFrag extends BaseFragment {
   @BindView(R.id.tv_settle_result)
   TextView mTvSettleResult;
   Unbinder unbinder;
-
+  private CountDownTimer timer;
 
   @SuppressLint("HandlerLeak")
   private Handler mHandler = new Handler() {
@@ -62,6 +64,24 @@ public class SettleResultFrag extends BaseFragment {
   }
 
   @Override
+  protected void initData() {
+    super.initData();
+    timer = new CountDownTimer(30 * 1000, 1000) {
+      @Override
+      public void onTick(long millisUntilFinished) {
+        // TODO Auto-generated method stub
+        //        mTvTimer.setText(millisUntilFinished / 1000 + "s");
+      }
+
+      @Override
+      public void onFinish() {
+        FragmentParms.sChangeFragment.change(0);
+        EventBus.getDefault().postSticky("000");
+      }
+    }.start();
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     // TODO: inflate a fragment view
     View rootView = super.onCreateView(inflater, container, savedInstanceState);
@@ -84,6 +104,7 @@ public class SettleResultFrag extends BaseFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+    timer.cancel();
     unbinder.unbind();
     EventBus.getDefault().unregister(this);
   }

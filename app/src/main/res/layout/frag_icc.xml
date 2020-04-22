@@ -5,41 +5,41 @@
               android:gravity="center"
               android:orientation="vertical">
 
-	<ImageView
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@mipmap/slogo"
-		android:scaleType="fitCenter"
-		/>
-	<!--<Button-->
-	<!--android:id="@+id/readerInit"-->
-	<!--android:layout_width="wrap_content"-->
-	<!--android:layout_height="wrap_content"-->
-	<!--android:text="初始化"-->
-	<!--/>-->
+	<!--<ImageView-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="match_parent"-->
+		<!--android:background="@mipmap/slogo"-->
+		<!--android:scaleType="fitCenter"-->
+		<!--/>-->
+	<Button
+	android:id="@+id/readerInit"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="初始化"
+	/>
 
-	<!--<Button-->
-	<!--android:id="@+id/powerOn"-->
-	<!--android:layout_width="wrap_content"-->
-	<!--android:layout_height="wrap_content"-->
-	<!--android:text="上电"/>-->
+	<Button
+	android:id="@+id/powerOn"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="上电"/>
 
-	<!--<Button-->
-	<!--android:id="@+id/readWrite"-->
-	<!--android:layout_width="wrap_content"-->
-	<!--android:layout_height="wrap_content"-->
-	<!--android:text="发送测试数据"/>-->
+	<Button
+	android:id="@+id/readWrite"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="发送测试数据"/>
 
-	<!--<Button-->
-	<!--android:id="@+id/powerOff"-->
-	<!--android:layout_width="wrap_content"-->
-	<!--android:layout_height="wrap_content"-->
-	<!--android:text="下电"/>-->
+	<Button
+	android:id="@+id/powerOff"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="下电"/>
 
-	<!--<TextView-->
-	<!--android:id="@+id/result"-->
-	<!--android:layout_width="wrap_content"-->
-	<!--android:layout_height="wrap_content"-->
-	<!--android:text="-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;result-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;"-->
-	<!--android:textColor="@color/colorPrimaryDark"/>-->
+	<TextView
+	android:id="@+id/result"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="-------------result-------------"
+	android:textColor="@color/colorPrimaryDark"/>
 </LinearLayout>

@@ -19,13 +19,14 @@ import com.xwr.smarttermin.R;
 import com.xwr.smarttermin.base.BaseFragment;
 import com.xwr.smarttermin.bean.CardBean;
 import com.xwr.smarttermin.comm.Session;
-import com.xwr.smarttermin.util.UiUtil;
 import com.zhangke.websocket.WebSocketHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static com.xwr.smarttermin.util.UiUtil.println;
 
 /**
  * Create by xwr on 2020/4/3
@@ -44,10 +45,10 @@ public class IdCardFrag extends BaseFragment {
     public void handleMessage(Message msg) {
       switch (msg.what) {
         case USBMsg.USB_DeviceConnect:// 设备连接
-          UiUtil.showToast(getContext(), "设备连接");
+          println("小二代证设备连接");
           break;
         case USBMsg.USB_DeviceOffline:// 设备断开
-          UiUtil.showToast(getContext(), "设备断开");
+          println("设备断开");
           break;
         case USBMsg.ReadIdCardSusse:
           break;
@@ -113,7 +114,7 @@ public class IdCardFrag extends BaseFragment {
         return;
       }
       mTvOutput.setText(ic.getPeopleName() + ic.getIDCard());
-      if (ic!= null) {
+      if (ic != null) {
         CardBean cardBean = new CardBean();
         cardBean.setName(ic.getPeopleName());
         cardBean.setCardNum(ic.getIDCard());

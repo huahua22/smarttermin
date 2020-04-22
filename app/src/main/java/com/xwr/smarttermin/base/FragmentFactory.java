@@ -1,6 +1,8 @@
 package com.xwr.smarttermin.base;
 
+import com.xwr.smarttermin.main.CardFrag;
 import com.xwr.smarttermin.main.FaceCollectFrag;
+import com.xwr.smarttermin.main.FaceRecogFrag;
 import com.xwr.smarttermin.main.IccFrag;
 import com.xwr.smarttermin.main.IdCardFrag;
 import com.xwr.smarttermin.main.IndexFrag;
@@ -9,6 +11,7 @@ import com.xwr.smarttermin.main.OwnExpenseFrag;
 import com.xwr.smarttermin.main.PasswordFrag;
 import com.xwr.smarttermin.main.ScanHealthCertificateFrag;
 import com.xwr.smarttermin.main.ScanPayBarcodeFrag;
+import com.xwr.smarttermin.main.SettleFrag;
 import com.xwr.smarttermin.main.SettleInfoFrag;
 import com.xwr.smarttermin.main.SettleResultFrag;
 import com.xwr.smarttermin.main.UnionPaycardsFrag;
@@ -61,6 +64,15 @@ public class FragmentFactory {
           break;
         case 11://人脸采集
           fragment = new UnionPaycardsFrag();
+          break;
+        case 12://人脸识别
+          fragment = new FaceRecogFrag();
+          break;
+        case 13://银联卡
+          fragment = new CardFrag();
+          break;
+        case 14:
+          fragment = new SettleFrag();
           break;
       }
       assert fragment != null;

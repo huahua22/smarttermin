@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.xwr.smarttermin.util.UiUtil.println;
+
 public abstract class BaseFragment extends Fragment {
 
   private View mView;
@@ -28,7 +30,7 @@ public abstract class BaseFragment extends Fragment {
   protected abstract void initView();
 
   protected void initData() {
-
+    println("initData");
   }
 
   @Override
@@ -37,7 +39,7 @@ public abstract class BaseFragment extends Fragment {
     if (isVisibleToUser) {// 当fragment处于可见状态，当fragment结合viewpagers使用的时候
       if (mView != null) {
         System.out.println("--->>>visible");
-//        initData();
+        //        initData();
       }
     }
   }
@@ -57,6 +59,7 @@ public abstract class BaseFragment extends Fragment {
   @Override
   public void onResume() {
     super.onResume();
+    println("onResume");
     initData();
   }
 
