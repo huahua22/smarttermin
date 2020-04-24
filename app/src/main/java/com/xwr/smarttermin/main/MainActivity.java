@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
           commitFrag(8);
         } else if ("013".equals(recipientData.getRecipientNo())) {//银联
           UiUtil.showToast(mContext, "请刷银联卡");
-          commitFrag(13);
+          //          commitFrag(13);
         } else if ("014".equals(recipientData.getRecipientNo())) {//门诊卡
           UiUtil.showToast(mContext, "请刷门诊卡");
           commitFrag(13);

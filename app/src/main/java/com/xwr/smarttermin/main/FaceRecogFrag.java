@@ -64,6 +64,7 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
   Unbinder unbinder;
   int faceFlag = 0;
   private int index = 0;
+  private int sindex = 0;
   //权限信息
   private static final String[] NEEDED_PERMISSIONS = new String[]{
     Manifest.permission.READ_PHONE_STATE,
@@ -94,7 +95,7 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
           mBtnFaceRegister.setVisibility(View.GONE);
           break;
         case 2:
-          Session.mSocketResult.getRecipientData().setResult(true);
+          //          Session.mSocketResult.getRecipientData().setResult(true);
           String mrecipient = Session.mSocketResult.getRecipientData().getSender();
           Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
           Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
@@ -102,7 +103,7 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
           WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
           break;
         case 3:
-          Session.mSocketResult.getRecipientData().setResult(false);
+          //          Session.mSocketResult.getRecipientData().setResult(false);
           String mr = Session.mSocketResult.getRecipientData().getSender();
           Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
           Session.mSocketResult.getRecipientData().setRecipient(mr);
@@ -237,14 +238,17 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
 
   @Override
   public void onResult(int result) {
-    System.out.println("---->>>result:" + result);
     if (faceFlag == 1) {
       if (result == 1) {
-        mHandler.sendEmptyMessage(2);
+        index = 0;
+        sindex++;
+        if (sindex == 10) {
+          mHandler.sendEmptyMessage(2);
+        }
       } else {
+        sindex = 0;
         index++;
-        if (index == 10) {
-          System.out.println("---->>>fail index:" + index);
+        if (index == 20) {
           mHandler.sendEmptyMessage(3);
           index = 0;
         }
@@ -259,7 +263,6 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
 
   @Override
   public void onDestroy() {
-    System.out.println("---->>>face recog destroy");
     if (mArcFacePresenter != null) {
       mArcFacePresenter.onDestroy();
     }
