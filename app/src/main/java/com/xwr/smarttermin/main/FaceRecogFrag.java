@@ -80,6 +80,8 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
   private Camera mCamera;
   private SurfaceHolder mSurfaceHolder;
   private ArcFacePresenter mArcFacePresenter;
+  String mrecipient;
+  String msender;
   @SuppressLint("HandlerLeak")
   private Handler mHandler = new Handler() {
     @Override
@@ -96,18 +98,19 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
           break;
         case 2:
           //          Session.mSocketResult.getRecipientData().setResult(true);
-          String mrecipient = Session.mSocketResult.getRecipientData().getSender();
-          Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
+          Session.mSocketResult.getRecipientData().setSender(msender);
           Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
           Session.mSocketResult.getRecipientData().setSuccess(true);
+          Session.mSocketResult.getRecipientData().setMsg(null);
           WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
           break;
         case 3:
           //          Session.mSocketResult.getRecipientData().setResult(false);
-          String mr = Session.mSocketResult.getRecipientData().getSender();
-          Session.mSocketResult.getRecipientData().setSender(Session.mSocketResult.getRecipientData().getRecipient());
-          Session.mSocketResult.getRecipientData().setRecipient(mr);
+          //          String mr = Session.mSocketResult.getRecipientData().getSender();
+          Session.mSocketResult.getRecipientData().setSender(msender);
+          Session.mSocketResult.getRecipientData().setRecipient(mrecipient);
           Session.mSocketResult.getRecipientData().setSuccess(false);
+          Session.mSocketResult.getRecipientData().setMsg("人脸认证失败，请重试!");
           WebSocketHandler.getDefault().send(new Gson().toJson(Session.mSocketResult));
           break;
         case 4:
@@ -242,8 +245,9 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
       if (result == 1) {
         index = 0;
         sindex++;
-        if (sindex == 10) {
+        if (sindex == 15) {
           mHandler.sendEmptyMessage(2);
+          sindex=0;
         }
       } else {
         sindex = 0;
@@ -285,6 +289,8 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
   @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
   public void onEvent(String data) {
     System.out.println("--->>>read result event：" + data);
+    mrecipient = Session.mSocketResult.getRecipientData().getSender();
+    msender = Session.mSocketResult.getRecipientData().getRecipient();
     if ("031".equals(data)) {
       mHandler.sendEmptyMessage(0);
       faceFlag = 0;
@@ -293,6 +299,7 @@ public class FaceRecogFrag extends BaseFragment implements CameraView, IFaceResu
       mHandler.sendEmptyMessage(1);
       faceFlag = 1;
       index = 0;
+      sindex =0;
     }
   }
 
