@@ -48,16 +48,18 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
   }
 
 
-  protected void initView() {
+  private void initView() {
     mContext = this;
     boolean setConnect = true;
+    FragmentParms.setFragmentSelected(this);
     while (setConnect) {
       if (WebSocketHandler.getDefault().isConnect()) {
-        WebSocketHandler.getDefault().addListener(socketListener);
-        setConnect = false;
+        if (socketListener != null) {
+          WebSocketHandler.getDefault().addListener(socketListener);
+          setConnect = false;
+        }
       }
     }
-    FragmentParms.setFragmentSelected(this);
   }
 
   public void commitFrag(int position) {
@@ -104,11 +106,11 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
           commitFrag(0);
           EventBus.getDefault().postSticky("000");
         } else if ("011".equals(recipientData.getRecipientNo())) {//身份证
+          //          UiUtil.showToast(mContext, "请刷身份证");
           commitFrag(0);
           EventBus.getDefault().postSticky("011");
-          UiUtil.showToast(mContext, "请刷身份证");
         } else if ("012".equals(recipientData.getRecipientNo())) {//医保卡
-          UiUtil.showToast(mContext, "请刷医保卡");
+          //          UiUtil.showToast(mContext, "请刷医保卡");
           commitFrag(8);
         } else if ("013".equals(recipientData.getRecipientNo())) {//银联
           UiUtil.showToast(mContext, "请刷银联卡");
@@ -154,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements ChangeFragment {
   protected void onDestroy() {
     super.onDestroy();
     WebSocketHandler.getDefault().removeListener(socketListener);
-    Log.d(TAG, "webSocket destroy");
-    WebSocketHandler.getDefault().destroy();
   }
 
   @Override

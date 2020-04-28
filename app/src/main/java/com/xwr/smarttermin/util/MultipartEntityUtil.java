@@ -24,14 +24,15 @@ public class MultipartEntityUtil {
 
     URL uri = new URL(actionUrl);
     HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
+    //设置http连接属性
     conn.setReadTimeout(5 * 1000); // 缓存的最长时间
     conn.setDoInput(true);// 允许输入
     conn.setDoOutput(true);// 允许输出
     conn.setUseCaches(false); // 不允许使用缓存
-    conn.setRequestMethod("POST");
-    conn.setRequestProperty("connection", "keep-alive");
-    conn.setRequestProperty("Charsert", "UTF-8");
-    conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA + ";boundary=" + BOUNDARY);
+    conn.setRequestMethod("POST");//请求方式
+    conn.setRequestProperty("connection", "keep-alive");//在一次TCP连接中可以持续发送多份数据而不会断开连接
+    conn.setRequestProperty("Charsert", "UTF-8");//编码
+    conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA + ";boundary=" + BOUNDARY);//multipart/form-data能上传文件的编码格式
 
     DataOutputStream outStream = new DataOutputStream(conn.getOutputStream());
     // 发送文件数据
@@ -56,7 +57,7 @@ public class MultipartEntityUtil {
       is.close();
       outStream.write(LINEND.getBytes());
     }
-   
+
     // 请求结束标志
     byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINEND).getBytes();
     outStream.write(end_data);
@@ -71,7 +72,6 @@ public class MultipartEntityUtil {
     outStream.close();
     conn.disconnect();
     return result;
-
   }
 
   public static String convertStreamToString(InputStream is) throws IOException {

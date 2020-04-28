@@ -90,6 +90,11 @@ public class IccFrag extends BaseFragment {
         e.printStackTrace();
       }
     }
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
     if (USBDevice.mDeviceConnection != null) {
       initReadData();
     } else {
